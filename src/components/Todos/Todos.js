@@ -141,9 +141,8 @@ const Todos = () => {
 									checked={status === 'done'}
 									onChange={() => statusHandler(id)}
 								/>
-								<p className='todos__text'>{text}</p>
-								{editTodos.isEditorActive
-									? (<TextField value={newTodo}/>)
+								{/*editTodos.isEditorActive*/}
+								{true ? (<TextField value={newTodo}/>)
 									: <p className='todos__text'>{text}</p>}
 								<div className="todos__actions">
 									<FormControl className="todos__select">
