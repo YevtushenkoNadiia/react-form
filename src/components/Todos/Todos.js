@@ -15,6 +15,14 @@ import { STATUSES } from "../../constants";
 const Todos = () => {
 	const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')) || []);
 	const [newTodo, setNewTodo] = useState('');
+	const [switchTodo, setSwitchTodo] = useState(false);
+	// const [editTodos, setEditTodos] = useState({
+	// 	 	isEditorActive: true
+	// 	 });
+
+	const switchHandler = ({ target: { checked } }) => {
+		setSwitchTodo(checked);
+	};
 
 	const inputChange = (e) => {
 		setNewTodo(e.target.value);
@@ -33,10 +41,6 @@ const Todos = () => {
 
 	};
 
-	const editTodo = id => {
-
-	}
-
 	function statusHandler (id) {
 		const newTodos = todos.map(todo => {
 			if(todo.id === id) {
@@ -49,6 +53,21 @@ const Todos = () => {
 		})
 		setTodos(newTodos)
 	}
+
+	// const editTodo = id => {
+	// 	setTodos(todos.filter(todo=>todo.id !== id))
+	// }
+
+
+	// function editHandler (id) {
+	// 	const editTodos = todos.map(todo => {
+	// 		if(todo.id === id) {
+	// 			return {...todo, text:''}
+	// 		}
+	// 		return todo
+	// 	})
+	// 	setEditTodos(editTodos)
+	// }
 
 	function changeStatus (e, id) {
 		const newTodos = todos.map(todo => {
@@ -64,6 +83,13 @@ const Todos = () => {
 	function deleteTodo (id) {
 		setTodos(todos.filter(todo=>todo.id !== id))
 	}
+	function editTodo (id) {
+		setTodos(todos.filter(todo=>todo.id !== id))
+	}
+
+	// function editTodo (id) {
+	// 	setEditTodos(editTodos.filter(todo=>todo.id !== id))
+	// }
 
 	function saveTodos () {
 		localStorage.setItem('todos', JSON.stringify(todos))
@@ -99,8 +125,8 @@ const Todos = () => {
 			<div className="todos__autosave">
 				<Switch
 					color="primary"
-					checked={true}
-					onChange={() => statusHandler()}
+					checked={switchTodo}
+					onChange={switchHandler}
 				/>
 				Autosave
 			</div>
@@ -115,8 +141,10 @@ const Todos = () => {
 									checked={status === 'done'}
 									onChange={() => statusHandler(id)}
 								/>
-								<p className="todos__text">{text}</p>
-								{/*{isEditorActive ? (<TextField value={text}/> : <p className='todos__text'>{text}</p>)}*/}
+								<p className='todos__text'>{text}</p>
+								{editTodos.isEditorActive
+									? (<TextField value={newTodo}/>)
+									: <p className='todos__text'>{text}</p>}
 								<div className="todos__actions">
 									<FormControl className="todos__select">
 										<InputLabel>Status</InputLabel>
@@ -131,14 +159,16 @@ const Todos = () => {
 												))}
 										</Select>
 									</FormControl>
-									<Button startIcon={<Edit />}
-											variant={"contained"}
-											color={"primary"}
+									<Button className="todos__edit" startIcon={<Edit />}
+											variant="contained"
+											color="primary"
 											size="small"
+											// onChange={editHandler}
+											// value="text"
 											onClick={() => editTodo(id)}>Edit</Button>
-									<Button startIcon={<Delete />}
-											variant={"contained"}
-											color={"secondary"}
+									<Button className="todos__delete" startIcon={<Delete />}
+											variant="contained"
+											color="secondary"
 											size="small"
 											onClick={() => deleteTodo(id)}>Delete</Button>
 

@@ -3,6 +3,8 @@
 
 	&__save {
 		margin-top: 20px !important;
+		font-weight: bolder !important;
+		border-width: 3px !important;
 	}
 
 	&__list {
@@ -31,5 +33,9 @@
 
 	&__select {
 		min-width: 100px !important;
+	}
+
+	&__delete {
+		background-color: #DC0031 !important;
 	}
 }
