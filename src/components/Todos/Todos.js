@@ -16,9 +16,15 @@ const Todos = () => {
 	const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')) || []);
 	const [newTodo, setNewTodo] = useState('');
 	const [switchTodo, setSwitchTodo] = useState(false);
-	// const [editTodos, setEditTodos] = useState({
-	// 	 	isEditorActive: true
-	// 	 });
+	const [editTodo, setEditTodo] = useState(false);
+
+	const editChangeHandler = (e) => {
+		setTodos(e.target.value);
+	};
+
+	const handleEdit = () => {
+		setEditTodo(!editTodo);
+	};
 
 	const switchHandler = ({ target: { checked } }) => {
 		setSwitchTodo(checked);
@@ -54,21 +60,6 @@ const Todos = () => {
 		setTodos(newTodos)
 	}
 
-	// const editTodo = id => {
-	// 	setTodos(todos.filter(todo=>todo.id !== id))
-	// }
-
-
-	// function editHandler (id) {
-	// 	const editTodos = todos.map(todo => {
-	// 		if(todo.id === id) {
-	// 			return {...todo, text:''}
-	// 		}
-	// 		return todo
-	// 	})
-	// 	setEditTodos(editTodos)
-	// }
-
 	function changeStatus (e, id) {
 		const newTodos = todos.map(todo => {
 			if (todo.id === id) {
@@ -83,13 +74,6 @@ const Todos = () => {
 	function deleteTodo (id) {
 		setTodos(todos.filter(todo=>todo.id !== id))
 	}
-	function editTodo (id) {
-		setTodos(todos.filter(todo=>todo.id !== id))
-	}
-
-	// function editTodo (id) {
-	// 	setEditTodos(editTodos.filter(todo=>todo.id !== id))
-	// }
 
 	function saveTodos () {
 		localStorage.setItem('todos', JSON.stringify(todos))
@@ -141,8 +125,11 @@ const Todos = () => {
 									checked={status === 'done'}
 									onChange={() => statusHandler(id)}
 								/>
-								{/*editTodos.isEditorActive*/}
-								{true ? (<TextField value={newTodo}/>)
+								{!editTodo ? (<TextField
+												type="text"
+												value={text}
+												name="todo"
+												onChange={editChangeHandler}/>)
 									: <p className='todos__text'>{text}</p>}
 								<div className="todos__actions">
 									<FormControl className="todos__select">
@@ -150,8 +137,8 @@ const Todos = () => {
 										<Select
 											value={status}
 											onChange={function (e) {
-												return changeStatus(e,id)
-											}}
+											return changeStatus(e,id)
+										}}
 										>
 											{STATUSES.map(status => (
 												<MenuItem value={status} key={status}>{status}</MenuItem>
@@ -162,9 +149,7 @@ const Todos = () => {
 											variant="contained"
 											color="primary"
 											size="small"
-											// onChange={editHandler}
-											// value="text"
-											onClick={() => editTodo(id)}>Edit</Button>
+											onClick={handleEdit}>Edit</Button>
 									<Button className="todos__delete" startIcon={<Delete />}
 											variant="contained"
 											color="secondary"
