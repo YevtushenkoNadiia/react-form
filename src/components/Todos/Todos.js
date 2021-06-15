@@ -11,24 +11,9 @@ import { Delete, Edit } from "@material-ui/icons";
 import { useEffect, useState } from "react";
 import { STATUSES } from "../../constants";
 
-
 const Todos = () => {
 	const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')) || []);
 	const [newTodo, setNewTodo] = useState('');
-	const [switchTodo, setSwitchTodo] = useState(false);
-	const [editTodo, setEditTodo] = useState(false);
-
-	const editChangeHandler = (e) => {
-		setTodos(e.target.value);
-	};
-
-	const handleEdit = () => {
-		setEditTodo(!editTodo);
-	};
-
-	const switchHandler = ({ target: { checked } }) => {
-		setSwitchTodo(checked);
-	};
 
 	const inputChange = (e) => {
 		setNewTodo(e.target.value);
@@ -39,6 +24,7 @@ const Todos = () => {
 		const newTodoItem = {
 			id: Date.now(),
 			text: newTodo,
+			// done: false,
 			status: 'new',
 		}
 
@@ -47,16 +33,21 @@ const Todos = () => {
 
 	};
 
+	const editTodo = id => {
+
+	}
+
 	function statusHandler (id) {
 		const newTodos = todos.map(todo => {
-			if(todo.id === id) {
-				if (todo.status !== 'done'){
-					return {...todo, status:'done'}
+			if (todo.id === id) {
+				if (todo.status !== 'done') {
+					return {...todo, status: 'done'}
 				}
-				return {...todo, status:'new'}
+				return {...todo, status: 'new'}
 			}
 			return todo
 		})
+
 		setTodos(newTodos)
 	}
 
@@ -72,7 +63,7 @@ const Todos = () => {
 	}
 
 	function deleteTodo (id) {
-		setTodos(todos.filter(todo=>todo.id !== id))
+		setTodos(todos.filter(todo => todo.id !== id))
 	}
 
 	function saveTodos () {
@@ -100,20 +91,22 @@ const Todos = () => {
 						   variant="outlined" />
 				<Button variant="contained"
 						type="submit"
-						color="primary">Add todo</Button>
+						color="primary">Add todo!!!</Button>
 			</form>
 			{todos.length ? <Button variant="outlined"
 									color="primary"
 									className="todos__save"
 									onClick={saveTodos}>Save todos</Button> : null}
+
 			<div className="todos__autosave">
 				<Switch
-					color="primary"
-					checked={switchTodo}
-					onChange={switchHandler}
+				color="primary"
+				checked={true}
+				onChange={() => statusHandler()}
 				/>
 				Autosave
 			</div>
+
 			<div className="todos__list">
 				{todos.length
 					? (todos.map(({id, text, status}) => {
@@ -121,35 +114,33 @@ const Todos = () => {
 							<div className="todos__item"
 								 key={id}>
 								<Checkbox
-									color='defaults'
+									color="default"
 									checked={status === 'done'}
 									onChange={() => statusHandler(id)}
 								/>
-								{!editTodo ? (<TextField
-												type="text"
-												value={text}
-												name="todo"
-												onChange={editChangeHandler}/>)
-									: <p className='todos__text'>{text}</p>}
+								<p className="todos__text">{text}</p>
+								{/*{true ? (<TextField value={text}/>) : <p className="todos__text">{text}</p>}*/}
 								<div className="todos__actions">
 									<FormControl className="todos__select">
 										<InputLabel>Status</InputLabel>
 										<Select
 											value={status}
 											onChange={function (e) {
-											return changeStatus(e,id)
-										}}
+												return changeStatus(e, id)
+											}}
 										>
-											{STATUSES.map(status => (
-												<MenuItem value={status} key={status}>{status}</MenuItem>
-												))}
+											{STATUSES.map((status) => (
+												<MenuItem value={status}
+														  key={status}>{status}</MenuItem>
+											))}
+
 										</Select>
 									</FormControl>
-									<Button className="todos__edit" startIcon={<Edit />}
+									<Button startIcon={<Edit />}
 											variant="contained"
 											color="primary"
 											size="small"
-											onClick={handleEdit}>Edit</Button>
+											onClick={() => editTodo(id)}>Edit</Button>
 									<Button className="todos__delete" startIcon={<Delete />}
 											variant="contained"
 											color="secondary"
@@ -167,9 +158,6 @@ const Todos = () => {
 };
 
 export default Todos;
-
-
-
 
 
 
