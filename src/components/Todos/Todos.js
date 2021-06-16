@@ -1,19 +1,18 @@
 import "./Todos.scss";
 import {
 	Button,
-	Checkbox,
-	Switch,
-	FormControl,
-	InputLabel, MenuItem, Select,
+	Checkbox, FormControlLabel,
 	TextField,
 } from "@material-ui/core";
-import { Delete, Edit } from "@material-ui/icons";
 import { useEffect, useState } from "react";
-import { STATUSES } from "../../constants";
+import IOSSwitch from "../IOSSwitch/IOSSwitch";
+import TodoItem from "../TodoItem/TodoItem";
+
 
 const Todos = () => {
 	const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')) || []);
 	const [newTodo, setNewTodo] = useState('');
+	const [switchTodo, setSwitchTodo] = useState(false);
 
 	const inputChange = (e) => {
 		setNewTodo(e.target.value);
@@ -24,7 +23,6 @@ const Todos = () => {
 		const newTodoItem = {
 			id: Date.now(),
 			text: newTodo,
-			// done: false,
 			status: 'new',
 		}
 
@@ -33,50 +31,17 @@ const Todos = () => {
 
 	};
 
-	const editTodo = id => {
-
-	}
-
-	function statusHandler (id) {
-		const newTodos = todos.map(todo => {
-			if (todo.id === id) {
-				if (todo.status !== 'done') {
-					return {...todo, status: 'done'}
-				}
-				return {...todo, status: 'new'}
-			}
-			return todo
-		})
-
-		setTodos(newTodos)
-	}
-
-	function changeStatus (e, id) {
-		const newTodos = todos.map(todo => {
-			if (todo.id === id) {
-				return {...todo, status: e.target.value}
-			}
-			return todo
-		})
-
-		setTodos(newTodos)
-	}
-
-	function deleteTodo (id) {
-		setTodos(todos.filter(todo => todo.id !== id))
-	}
-
 	function saveTodos () {
 		localStorage.setItem('todos', JSON.stringify(todos))
-	}
+	};
 
-	useEffect(()=>{
-		console.log('useEffect')
+	const switchHandler = ({target: {checked}}) => {
+		setSwitchTodo(checked);
+	};
 
-		return ()=>{
-			// ...
-		}
-	},[todos])
+	useEffect(() => {
+		saveTodos()
+	}, [todos])
 
 	return (
 		<div className="todos">
@@ -91,7 +56,7 @@ const Todos = () => {
 						   variant="outlined" />
 				<Button variant="contained"
 						type="submit"
-						color="primary">Add todo!!!</Button>
+						color="primary">Add todo</Button>
 			</form>
 			{todos.length ? <Button variant="outlined"
 									color="primary"
@@ -99,58 +64,26 @@ const Todos = () => {
 									onClick={saveTodos}>Save todos</Button> : null}
 
 			<div className="todos__autosave">
-				<Switch
-				color="primary"
-				checked={true}
-				onChange={() => statusHandler()}
+				<FormControlLabel
+					control={<IOSSwitch checked={switchTodo}
+										onChange={switchHandler} />}
+					label="iOS style"
+				/>
+
+				<Checkbox
+					color="default"
+					checked={true}
+					onChange={() => {}}
 				/>
 				Autosave
 			</div>
 
 			<div className="todos__list">
 				{todos.length
-					? (todos.map(({id, text, status}) => {
-						return (
-							<div className="todos__item"
-								 key={id}>
-								<Checkbox
-									color="default"
-									checked={status === 'done'}
-									onChange={() => statusHandler(id)}
-								/>
-								<p className="todos__text">{text}</p>
-								{/*{true ? (<TextField value={text}/>) : <p className="todos__text">{text}</p>}*/}
-								<div className="todos__actions">
-									<FormControl className="todos__select">
-										<InputLabel>Status</InputLabel>
-										<Select
-											value={status}
-											onChange={function (e) {
-												return changeStatus(e, id)
-											}}
-										>
-											{STATUSES.map((status) => (
-												<MenuItem value={status}
-														  key={status}>{status}</MenuItem>
-											))}
-
-										</Select>
-									</FormControl>
-									<Button startIcon={<Edit />}
-											variant="contained"
-											color="primary"
-											size="small"
-											onClick={() => editTodo(id)}>Edit</Button>
-									<Button className="todos__delete" startIcon={<Delete />}
-											variant="contained"
-											color="secondary"
-											size="small"
-											onClick={() => deleteTodo(id)}>Delete</Button>
-
-								</div>
-							</div>
-						);
-					}))
+					? (todos.map((todo) => <TodoItem key={todo.id}
+													 todo={todo}
+													 todos={todos}
+													 setTodos={setTodos} />))
 					: <h2>No todos...</h2>}
 			</div>
 		</div>
@@ -158,12 +91,6 @@ const Todos = () => {
 };
 
 export default Todos;
-
-
-
-
-
-
 
 
 
