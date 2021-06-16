@@ -16,29 +16,29 @@ const TodoItem = ({todo, todos, setTodos}) => {
     const [isEditorActive, setIsEditorActive] = useState(false);
     const [editingText, setEditingText] = useState('');
 
-    // function helper (id, key, value) {
-    //     const newTodos = todos.map(todo => {
-    //         if (todo.id === id) {
-    //             return {...todo, [key]: value}
-    //         }
-    //         return todo
-    //     })
-    //     setTodos(newTodos)
-    // }
+    function helper (id, todo, value) {
+        const newTodos = todos.map(todo => {
+            if (todo.id === id) {
+                return {...todo, todo: value}
+            }
+            return todo
+        })
+        setTodos(newTodos)
+    }
 
     const editTodo = (id, text) => {
         setEditingText(text)
         setIsEditorActive(prevState => !prevState)
 
         if (isEditorActive) {
-            // helper(id, text, editingText);
-            const newTodos = todos.map(todo => {
-                if (todo.id === id) {
-                    return {...todo, text: editingText}
-                }
-                return todo
-            })
-            setTodos(newTodos)
+            helper(id, text, editingText);
+            // const newTodos = todos.map(todo => {
+            //     if (todo.id === id) {
+            //         return {...todo, text: editingText}
+            //     }
+            //     return todo
+            // })
+            // setTodos(newTodos)
         }
     }
 
