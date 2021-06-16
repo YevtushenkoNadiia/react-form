@@ -16,13 +16,14 @@ const TodoItem = ({todo, todos, setTodos}) => {
     const [isEditorActive, setIsEditorActive] = useState(false);
     const [editingText, setEditingText] = useState('');
 
-    function helper (id, text, value) {
+    function helper (id, key, value) {
         const newTodos = todos.map(todo => {
             if (todo.id === id) {
-                return {...todo, text: value}
+                return {...todo, [key]: value}
             }
             return todo
         })
+
         setTodos(newTodos)
     }
 
@@ -31,7 +32,7 @@ const TodoItem = ({todo, todos, setTodos}) => {
         setIsEditorActive(prevState => !prevState)
 
         if (isEditorActive) {
-            helper(id, text, editingText);
+            helper(id, 'text', editingText)
             // const newTodos = todos.map(todo => {
             //     if (todo.id === id) {
             //         return {...todo, text: editingText}
@@ -43,28 +44,20 @@ const TodoItem = ({todo, todos, setTodos}) => {
     }
 
     function statusHandler (id) {
-        const newTodos = todos.map(todo => {
-            if (todo.id === id) {
-                if (todo.status !== 'done') {
-                    return {...todo, status: 'done'}
-                }
-                return {...todo, status: 'new'}
-            }
-            return todo
-        })
-
-        setTodos(newTodos)
+        helper(id, 'status', todo.status !== 'done' ? 'done' : 'new')
+        // const newTodos = todos.map(todo => {
+        //     if (todo.id === id) {
+        //         if (todo.status !== 'done') {
+        //             return {...todo, status: 'done'}
+        //         }
+        //         return {...todo, status: 'new'}
+        //     }
+        //     return todo
+        // })
     }
 
     function changeStatus (e, id) {
-        const newTodos = todos.map(todo => {
-            if (todo.id === id) {
-                return {...todo, status: e.target.value}
-            }
-            return todo
-        })
-
-        setTodos(newTodos)
+        helper(id, 'status', e.target.value)
     }
 
     function deleteTodo (id) {
