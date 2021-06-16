@@ -16,10 +16,10 @@ const TodoItem = ({todo, todos, setTodos}) => {
     const [isEditorActive, setIsEditorActive] = useState(false);
     const [editingText, setEditingText] = useState('');
 
-    function helper (id, todo, value) {
+    function helper (id, text, value) {
         const newTodos = todos.map(todo => {
             if (todo.id === id) {
-                return {...todo, todo: value}
+                return {...todo, text: value}
             }
             return todo
         })
