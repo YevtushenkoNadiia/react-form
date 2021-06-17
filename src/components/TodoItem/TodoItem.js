@@ -23,37 +23,19 @@ const TodoItem = ({todo, todos, setTodos}) => {
             }
             return todo
         })
-
         setTodos(newTodos)
     }
 
     const editTodo = (id, text) => {
         setEditingText(text)
         setIsEditorActive(prevState => !prevState)
-
         if (isEditorActive) {
             helper(id, 'text', editingText)
-            // const newTodos = todos.map(todo => {
-            //     if (todo.id === id) {
-            //         return {...todo, text: editingText}
-            //     }
-            //     return todo
-            // })
-            // setTodos(newTodos)
         }
     }
 
     function statusHandler (id) {
         helper(id, 'status', todo.status !== 'done' ? 'done' : 'new')
-        // const newTodos = todos.map(todo => {
-        //     if (todo.id === id) {
-        //         if (todo.status !== 'done') {
-        //             return {...todo, status: 'done'}
-        //         }
-        //         return {...todo, status: 'new'}
-        //     }
-        //     return todo
-        // })
     }
 
     function changeStatus (e, id) {

@@ -40,7 +40,9 @@ const Todos = () => {
 	};
 
 	useEffect(() => {
-		saveTodos()
+		if (switchTodo) {
+			saveTodos()
+		}
 	}, [todos])
 
 	return (
@@ -67,15 +69,8 @@ const Todos = () => {
 				<FormControlLabel
 					control={<IOSSwitch checked={switchTodo}
 										onChange={switchHandler} />}
-					label="iOS style"
+					label="Autosave"
 				/>
-
-				<Checkbox
-					color="default"
-					checked={true}
-					onChange={() => {}}
-				/>
-				Autosave
 			</div>
 
 			<div className="todos__list">
