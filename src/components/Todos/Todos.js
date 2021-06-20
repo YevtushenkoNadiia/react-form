@@ -85,7 +85,8 @@ const Todos = () => {
 
 			<div className="todos__autosave">
 				<FormControlLabel
-					control={<IOSSwitch checked={switchTodo === "on"} onChange={switchHandler} />}
+					control={<IOSSwitch checked={switchTodo} onChange={switchHandler} />}
+					// control={<IOSSwitch checked={switchTodo === "on"} onChange={switchHandler} />}
 					label="Autosave"
 				/>
 			</div>
