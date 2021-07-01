@@ -1,5 +1,10 @@
-.login-layout {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.login-page {
+  &__title {
+    text-align: center;
+  }
+
+  &__form {
+    max-width: 600px;
+    margin: 0 auto;
+  }
 }

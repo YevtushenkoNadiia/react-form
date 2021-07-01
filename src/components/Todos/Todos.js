@@ -9,9 +9,6 @@ import IOSSwitch from "../IOSSwitch/IOSSwitch";
 import TodoItem from "../TodoItem/TodoItem";
 
 const Todos = () => {
-  const { push } = useHistory();
-  const location = useLocation();
-
   const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")) || []);
   const [newTodo, setNewTodo] = useState("");
   const [switchTodo, setSwitchTodo] = useState(localStorage.getItem("switchTodo") || "on");
@@ -46,9 +43,17 @@ const Todos = () => {
     }
   }, [todos]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // const [currentStatus, setCurrentStatus] = useState("new");
+
+  // const currentStatus = 22;
+  // setCurrentStatus((prevCurrentStatus) => prevCurrentStatus * 2);
+
+  const { push } = useHistory();
+
   Logger.info("push", push);
 
   function tabHandler(status) {
+    // setCurrentStatus(status);
     push({
       search: `status=${status}`,
     });
@@ -64,12 +69,13 @@ const Todos = () => {
     push({
       search: "status=new",
     });
-  }, [push]);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("switchTodo", switchTodo);
   }, [switchTodo]);
 
+  const location = useLocation();
   Logger.info("location", queryStringToObject(location.search).status);
 
   return (
