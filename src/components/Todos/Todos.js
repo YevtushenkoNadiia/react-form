@@ -69,7 +69,7 @@ const Todos = () => {
     push({
       search: "status=new",
     });
-  }, []);
+  }, [push]);
 
   useEffect(() => {
     localStorage.setItem("switchTodo", switchTodo);
